@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { v4 as uuidv4 } from 'uuid';
 import {Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material'
@@ -9,6 +9,7 @@ import { FileNode, File } from '../types/fileTypes'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CustomSnackBar from './CustomSnackBar';
 import Playground from '../pages/Playground';
+import { get } from 'http';
 
 export default function FileManager() {
     const [currpath, setCurrpath] = React.useState<string>('~');
@@ -46,9 +47,9 @@ export default function FileManager() {
       return false;
     }
 
-    const getNodeOfPath = () => {
+    const getNodeOfPath = (tree = fileTree) => {
       const pathToParse = currpath.split("/");
-      let currNode = fileTree;
+      let currNode = tree;
       for(let i=1;i<pathToParse.length;i++){
         for(const node of currNode.children){
           if(node.name === pathToParse[i]){
@@ -59,15 +60,39 @@ export default function FileManager() {
       }
       return currNode;
     }
-
-    const addNodeToTree = (node: FileNode)=>{
-      const nodeToAddTo = getNodeOfPath();
-      if(checkFolderOrFileExists(nodeToAddTo,node.name)){
+    const addNodeToTree = (node: FileNode) => {
+      const newTree = structuredClone(fileTree);
+      const targetFolder = getNodeOfPath(newTree);
+    
+      if (checkFolderOrFileExists(targetFolder, node.name)) {
         return false;
-      }  
-      nodeToAddTo.children.push(node);
-      return true;
+      }
+    
+      if (targetFolder.type === 'folder') {
+        targetFolder.children.push(node);
+        setFileTree(newTree);
+        return true;
+      }
+    
+      return false;
     };
+    
+
+    const removedNodeFromTree = (node: FileNode) => {
+      const newTree = structuredClone(fileTree);
+      const pathToParse = currpath.split("/");
+      let current = newTree;
+      const nodeTo = getNodeOfPath(current);
+      if (nodeTo.type === 'folder') {
+        const index = nodeTo.children.findIndex((child: FileNode) => child.id === node.id);
+        nodeTo.children.splice(index, 1);
+        setFileTree(newTree);
+        return true;
+      }
+    
+      return false;
+    };
+    
 
     const handleDialogOpen = () => {
         setDialogOpen(true);
@@ -168,6 +193,7 @@ export default function FileManager() {
             currentPath = {currpath}
             setCurrentpath={setCurrpath}
             setClickedFile={setClickedFile}
+            removeNodeFromTree={removedNodeFromTree}
           />
         </Box>
       </Box>

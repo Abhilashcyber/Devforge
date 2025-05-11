@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react'
 import { FileNode, Folder, File } from '../types/fileTypes'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Icon, IconButton, Typography } from '@mui/material'
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import FolderIcon from '@mui/icons-material/Folder'
-import Playground from '../pages/Playground'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export interface FileManagerGUIProps {
     getNodeOfPath: any
     currentPath: string
     setCurrentpath: React.Dispatch<React.SetStateAction<string>>
     setClickedFile: React.Dispatch<React.SetStateAction<File | null>>
+    removeNodeFromTree: (node: FileNode) => void
 }
 
 export default function FileManagerGUI(props: FileManagerGUIProps) {
-  const { getNodeOfPath, currentPath, setCurrentpath, setClickedFile } = props
+  const { getNodeOfPath, currentPath, setCurrentpath, setClickedFile, removeNodeFromTree } = props
   const nodeToDisplay = getNodeOfPath();
 
   const renderNodes = (node: Folder) => {
@@ -25,6 +26,7 @@ export default function FileManagerGUI(props: FileManagerGUIProps) {
               node.type === 'folder'? setCurrentpath(currentPath + "/"+ node.name): setClickedFile(node);
             }}
             sx={{
+              position: 'relative',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -42,6 +44,24 @@ export default function FileManagerGUI(props: FileManagerGUIProps) {
               },
             }}
           >
+            <IconButton
+              sx={{
+                position: 'absolute',
+                top: 8,
+                left: 8,
+                zIndex: 1,
+              }}
+              onClick={(e) => {
+                e.stopPropagation(); // prevent triggering folder/file open
+                removeNodeFromTree(node);
+              }}
+            >
+                <DeleteIcon
+                  sx={{
+                    color: 'error.main',
+                    fontSize: 20,
+                  }}/>
+            </IconButton>
             {node.type === 'folder' ? (
               <FolderIcon sx={{ fontSize: 50, color: 'primary.main' }} />
             ) : (
