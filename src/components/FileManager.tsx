@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import { v4 as uuidv4 } from 'uuid';
 import {Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from '@mui/material'
@@ -9,22 +9,47 @@ import { FileNode, File } from '../types/fileTypes'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CustomSnackBar from './CustomSnackBar';
 import Playground from '../pages/Playground';
-import { get } from 'http';
+import {fetchCurrentPathAndFileTree, updateCurrentPathAndFileTree} from '../db';
+import { useAuth } from '../contexts/AuthContext';
+import { usePlayground } from '../contexts/PlaygroundContext';
+
 
 export default function FileManager() {
-    const [currpath, setCurrpath] = React.useState<string>('~');
-    const [fileTree, setFileTree] = React.useState<any>({
-      id: 'root',
-      name: '~',
-      type: 'folder',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      children: [],
-    });
+  const { currentUser } = useAuth();
+  const { currentPath, fTree } = usePlayground();
+  
+  const [currpath, setCurrpath] = React.useState<string>(currentPath);
+    const [fileTree, setFileTree] = React.useState<any>(fTree);
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [createType, setCreateType] = React.useState<string>();
     const [snackProps,setSnackProps] = React.useState<any>({snackMessage: "Default", snackStatus:false, fileCreated: false});
     const [clickedFile, setClickedFile] = React.useState<File | null>(null);
+
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+    // Debounce the auto-save
+    useEffect(() => {
+      if (!currentUser) return;
+  
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+  
+      debounceTimeout.current = setTimeout(() => {
+        updateCurrentPathAndFileTree(currentUser.uid, currpath, fileTree)
+          .then(() => {
+            console.log('Auto-saved successfully!');
+          })
+          .catch((error) => {
+            console.error('Auto-save error:', error);
+          });
+      }, 1000);
+  
+      return () => {
+        if (debounceTimeout.current) {
+          clearTimeout(debounceTimeout.current);
+        }
+      };
+    }, [currpath, fileTree, currentUser]);
     
     const openSnackBar = (status: string)=>{
       if(status == "created"){
@@ -166,7 +191,7 @@ export default function FileManager() {
   }
 
   return (
-    clickedFile ? <Playground file={clickedFile} setClickedFile={setClickedFile} /> :
+    clickedFile ? <Playground file={clickedFile} setClickedFile={setClickedFile} setFileTree={setFileTree} fileTree={fileTree} /> :
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar
         currentPage="File Manager"

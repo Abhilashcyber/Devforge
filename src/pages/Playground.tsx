@@ -3,12 +3,19 @@
 import { useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { Box, Button, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material'
-import { File } from '../types/fileTypes'
+import { File, FileNode } from '../types/fileTypes'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import IconButton from '@mui/material/IconButton';
 import SaveIcon from '@mui/icons-material/Save';
 import CustomSnackBar from '../components/CustomSnackBar'
 import Navbar from '../components/Navbar'
+
+interface PlaygroundProps { 
+  file: File, 
+  setClickedFile: React.Dispatch<React.SetStateAction<File | null>>, 
+  setFileTree: React.Dispatch<React.SetStateAction<FileNode>>, 
+  fileTree: FileNode 
+}
 
 const LANGUAGES = [
   { label: 'Python', value: 'python', defaultCode: 'print("Hello, World!")' },
@@ -16,7 +23,7 @@ const LANGUAGES = [
   { label: 'C++', value: 'cpp', defaultCode: '#include <iostream>\nusing namespace std;\nint main() {\n  cout << "Hello, World!";\n  return 0;\n}' },
 ]
 
-export default function Playground({ file, setClickedFile }: { file: File, setClickedFile: React.Dispatch<React.SetStateAction<File | null>> }) {
+export default function Playground({ file, setClickedFile, setFileTree, fileTree }: PlaygroundProps) {
   const [language, setLanguage] = useState(file.language || 'python')
   const [code, setCode] = useState(file.content || LANGUAGES.find((lang) => lang.value === language)?.defaultCode || '')
   const [input, setInput] = useState(file.input || '')
@@ -30,6 +37,8 @@ export default function Playground({ file, setClickedFile }: { file: File, setCl
     file.input = input
     file.output = output
     console.log('File saved');
+    const newFileTree = structuredClone(fileTree);
+    setFileTree(newFileTree);
     setSnackProps({snackMessage: "File saved successfully!", snackStatus: true, fileCreated: true});
   }
 

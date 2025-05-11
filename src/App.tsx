@@ -8,12 +8,14 @@ import ProtectedRoutes from './components/ProtectedRoutes'
 import Register from './components/Register'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import theme from './theme'
+import { PlaygroundProvider } from './contexts/PlaygroundContext'
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
         <AuthProvider>
+        <PlaygroundProvider>
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -25,6 +27,7 @@ function App() {
               </Route>
             </Routes>
           </Router>
+          </PlaygroundProvider>
         </AuthProvider>
     </ThemeProvider>
   )

@@ -15,6 +15,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import CustomSnackBar from './CustomSnackBar';
+import { createPlaygroundInDb, createUserInDb } from '../db';
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,12 +38,14 @@ const RegisterPage = () => {
       .then((userCredential: any) => {
         const user = userCredential.user;
         console.log('User registered:', user);
-
+        createUserInDb(user,email,fullName);
+        createPlaygroundInDb(user.uid);
         setFullName('');
         setEmail('');
         setPassword('');
         setConfirmPassword('');
         setSnackProps({snackMessage: "User registered successfully", snackStatus:true, fileCreated: true});
+
       })
       .catch((error: any) => {
         const errorCode = error.code;
