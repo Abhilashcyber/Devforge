@@ -51,7 +51,7 @@ export default function CustomSnackBar({
       open={open}
       autoHideDuration={2000}
       onClose={handleClose}
-      TransitionProps={{ onExited: handleExited }}
+      slotProps={{transition:{ onExited: handleExited }}}
     >
       <Alert
         onClose={handleClose}

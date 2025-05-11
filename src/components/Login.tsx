@@ -13,15 +13,36 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
+import CustomSnackBar from './CustomSnackBar';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  
+  const [snackProps,setSnackProps] = React.useState<any>({snackMessage: "Default", snackStatus:false, fileCreated: false});
   const handleTogglePassword = () => setShowPassword(prev => !prev);
-
+  const navigate = useNavigate();
   const handleLogin = (e:any) => {
     e.preventDefault();
     // Add login logic here
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setSnackProps({ snackMessage: 'User logged in successfully', snackStatus: true, fileCreated: true }); 
+        console.log('User logged in:', user);
+        navigate('/');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setSnackProps({ snackMessage: errorCode, snackStatus: true, fileCreated: false }); 
+        console.error('Error logging in:', errorCode, errorMessage);
+      });
+
     console.log('Login submitted');
   };
 
@@ -39,7 +60,6 @@ const LoginPage = () => {
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          {/* Replace with your actual logo */}
           <Typography variant="h4" fontWeight="bold" color="primary">
             DevForge
           </Typography>
@@ -108,6 +128,9 @@ const LoginPage = () => {
           Register here
         </Link>
       </Typography>
+      <CustomSnackBar
+        snackProps={snackProps}
+        setSnackProps={setSnackProps}/>
     </Container>
   );
 };

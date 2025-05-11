@@ -1,8 +1,9 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, ButtonGroup } from '@mui/material'
 import { Link } from 'react-router-dom'
-
-export default function Navbar({ currentPage, setCurrentPage, user, setUser }: any) {
+import { auth } from '../firebase'
+import { signOut } from 'firebase/auth'
+export default function Navbar({ currentPage, setCurrentPage }: any) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [menuOpen, setMenuOpen] = React.useState(false)
 
@@ -15,7 +16,14 @@ export default function Navbar({ currentPage, setCurrentPage, user, setUser }: a
     setAnchorEl(null)
     setMenuOpen(false)
   }
-
+  const handleLogout = async () => {
+    try{
+      await signOut(auth);
+      console.log('User logged out');
+    }catch(error){
+      console.error('Error logging out:', error)
+    }
+  }
   return (
     <AppBar position="static">
       <Toolbar>
@@ -50,7 +58,7 @@ export default function Navbar({ currentPage, setCurrentPage, user, setUser }: a
             </Link>
           </MenuItem>
         </Menu>
-        <Button color="inherit" onClick={() => setUser(null)}>
+        <Button color="inherit" onClick={handleLogout}>
           Logout
         </Button>
       </Toolbar>
