@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Toolbar, Typography, Button, Menu, MenuItem } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, ButtonGroup } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 export default function Navbar({ currentPage, setCurrentPage, user, setUser }: any) {
@@ -50,16 +50,9 @@ export default function Navbar({ currentPage, setCurrentPage, user, setUser }: a
             </Link>
           </MenuItem>
         </Menu>
-
-        {!user ? (
-          <Button color="inherit" onClick={() => setUser({ name: 'Dummy User' })}>
-            Login
-          </Button>
-        ) : (
-          <Button color="inherit" onClick={() => setUser(null)}>
-            Logout
-          </Button>
-        )}
+        <Button color="inherit" onClick={() => setUser(null)}>
+          Logout
+        </Button>
       </Toolbar>
     </AppBar>
   )

@@ -1,20 +1,33 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-// import Workspace from './pages/Workspace'
 import Arena from './pages/Arena'
 import Battleground from './pages/Battleground'
-import Playground from './pages/Playground'
 import FileManager from './components/FileManager'
+import { AuthProvider } from './contexts/AuthContext'
+import Login from './components/Login'
+import ProtectedRoutes from './components/ProtectedRoutes'
+import Register from './components/Register'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import theme from './theme'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<FileManager />} />
-        <Route path="/arena" element={<Arena />} />
-        <Route path="/battleground" element={<Battleground />} />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+        <AuthProvider>
+          <Router>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route element={<ProtectedRoutes/>}>
+                <Route path="/" element={<FileManager />} />
+                <Route path="/arena" element={<Arena />} />
+                <Route path="/battleground" element={<Battleground />} />
+              </Route>
+            </Routes>
+          </Router>
+        </AuthProvider>
+    </ThemeProvider>
   )
 }
 
-export default App
+export default App;
