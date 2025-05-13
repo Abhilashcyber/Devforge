@@ -17,6 +17,12 @@ export default function FileManagerGUI(props: FileManagerGUIProps) {
   const { getNodeOfPath, currentPath, setCurrentpath, setClickedFile, removeNodeFromTree } = props
   const nodeToDisplay = getNodeOfPath();
 
+  // useEffect(() => {
+  //   if (nodeToDisplay) {
+  //     setCurrentpath(nodeToDisplay.name);
+  //   }
+  // }, [nodeToDisplay, setCurrentpath]);
+
   const renderNodes = (node: Folder) => {
     return node.children.map(
       (node: FileNode) => {

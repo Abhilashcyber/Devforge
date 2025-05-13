@@ -11,22 +11,34 @@ import CustomSnackBar from './CustomSnackBar';
 import Playground from '../pages/Playground';
 import {fetchCurrentPathAndFileTree, updateCurrentPathAndFileTree} from '../db';
 import { useAuth } from '../contexts/AuthContext';
-import { usePlayground } from '../contexts/PlaygroundContext';
 
 
 export default function FileManager() {
-  const { currentUser } = useAuth();
-  const { currentPath, fTree } = usePlayground();
-  
-  const [currpath, setCurrpath] = React.useState<string>(currentPath);
-    const [fileTree, setFileTree] = React.useState<any>(fTree);
+  const { currentUser } = useAuth();  
+  const [currpath, setCurrpath] = React.useState<string>('~');
+    const [fileTree, setFileTree] = React.useState<any>({
+      id: 'root',
+      name: '~',
+      type: 'folder',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      children: [],
+    });
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [createType, setCreateType] = React.useState<string>();
     const [snackProps,setSnackProps] = React.useState<any>({snackMessage: "Default", snackStatus:false, fileCreated: false});
     const [clickedFile, setClickedFile] = React.useState<File | null>(null);
 
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
-    // Debounce the auto-save
+    
+    const fetchData = async () => {
+      if (currentUser) {
+        const { currentPath, fileTree }:any = await fetchCurrentPathAndFileTree(currentUser.uid);
+        setCurrpath(currentPath);
+        setFileTree(fileTree);
+      }
+    };
+
     useEffect(() => {
       if (!currentUser) return;
   
@@ -50,6 +62,10 @@ export default function FileManager() {
         }
       };
     }, [currpath, fileTree, currentUser]);
+    
+    useEffect(() => {
+      fetchData();
+    }, []);
     
     const openSnackBar = (status: string)=>{
       if(status == "created"){

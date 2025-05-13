@@ -53,7 +53,7 @@ const RegisterPage = () => {
         setSnackProps({snackMessage: errorCode, snackStatus:true, fileCreated: false});
         console.error('Error registering user:', errorCode, errorMessage);
       });
-
+      
     console.log('Register submitted');
   };
 
