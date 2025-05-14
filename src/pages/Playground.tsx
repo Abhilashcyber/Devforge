@@ -79,7 +79,7 @@ export default function Playground({ file, setClickedFile, setFileTree, fileTree
               <Button onClick={handleGoBack}><ArrowBackIosIcon /></Button>
               <Select
                 value={language}
-                onChange={handleChangeLanguage}
+                onChange={(event, child) => { return setLanguage((event.target as HTMLInputElement).value)}}
                 variant="outlined"
                 size="small"
                 sx={{
@@ -133,7 +133,6 @@ export default function Playground({ file, setClickedFile, setFileTree, fileTree
           </Box>
         </Box>
 
-        {/* Right Side */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 2 }}>
           <TextField
             fullWidth
@@ -154,6 +153,7 @@ export default function Playground({ file, setClickedFile, setFileTree, fileTree
           />
         </Box>
       </Box>
+
       <CustomSnackBar snackProps={snackProps} setSnackProps={setSnackProps}/>
     </Box>
   )

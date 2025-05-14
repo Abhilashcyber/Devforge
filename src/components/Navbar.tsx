@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, ButtonGroup } from
 import { Link } from 'react-router-dom'
 import { auth } from '../firebase'
 import { signOut } from 'firebase/auth'
+
 export default function Navbar({ currentPage, setCurrentPage }: any) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [menuOpen, setMenuOpen] = React.useState(false)
