@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../backend/firebase';
 import CustomSnackBar from './CustomSnackBar';
-import { createPlaygroundInDb, createUserInDb } from '../db';
+import { createPlaygroundInDb, createUserInDb } from '../backend/db';
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);

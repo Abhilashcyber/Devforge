@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import SaveIcon from '@mui/icons-material/Save';
 import CustomSnackBar from '../components/CustomSnackBar'
 import Navbar from '../components/Navbar'
+import { runCode } from '../backend/api'
 
 interface PlaygroundProps { 
   file: File, 
@@ -46,9 +47,30 @@ export default function Playground({ file, setClickedFile, setFileTree, fileTree
     setClickedFile(null)
   };
 
-  const handleRun = () => {
-    setOutput(`🧪 Code:\n${code}\n\n📥 Input:\n${input}\n\n⏳ [Execution simulated]`)
-  }
+  const handleRun = async () => {
+    setOutput('⏳ Running...');
+    try {
+      const result = await runCode(code, language, input);
+  
+      const { stdout, stderr, error, exit_code } = result;
+  
+      if (error) {
+        setOutput(`❌ Error: ${error}`);
+      } else {
+        const outputText = [
+          stdout ? `✅ Output:\n${stdout}` : '',
+          stderr ? `⚠️ Stderr:\n${stderr}` : '',
+          `🔚 Exit Code: ${exit_code}`,
+        ]
+          .filter(Boolean)
+          .join('\n\n');
+        setOutput(outputText);
+      }
+    } catch (err: any) {
+      setOutput(`❌ Request failed: ${err.message}`);
+    }
+  };
+  
   const handleChangeLanguage = (event: any) => {
     const selectedLanguage = event.target.value as string
     setLanguage(selectedLanguage)
@@ -112,7 +134,6 @@ export default function Playground({ file, setClickedFile, setFileTree, fileTree
                     variant="contained"
                     color="secondary"
                     onClick={handleRun}
-                    disabled={!user}
                   >
                     ▶️ Run Code
                   </Button>

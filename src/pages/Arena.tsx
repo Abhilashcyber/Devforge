@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import QuestionSetup from '../components/QuestionSetup';
 import AddQuestion from '../components/AddQuestion';
 import { Question } from '../types/fileTypes';
-import { fetchQuestions } from '../db';
+import { fetchQuestions } from '../backend/db';
 
 export default function Arena() {
   const [user, setUser] = useState<any>(null);

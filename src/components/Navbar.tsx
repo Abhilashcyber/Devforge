@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, ButtonGroup } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { auth } from '../firebase'
+import { auth } from '../backend/firebase'
 import { signOut } from 'firebase/auth'
 
 export default function Navbar({ currentPage, setCurrentPage }: any) {

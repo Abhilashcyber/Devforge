@@ -7,7 +7,7 @@ import {
   MenuItem,
   Divider,
 } from '@mui/material';
-import { addQuestion } from '../db';
+import { addQuestion } from '../backend/db';
 
 interface AddQuestionProps {
   setShowAddQuestion: React.Dispatch<React.SetStateAction<boolean>>;

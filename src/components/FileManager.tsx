@@ -9,7 +9,7 @@ import { FileNode, File } from '../types/fileTypes'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CustomSnackBar from './CustomSnackBar';
 import Playground from '../pages/Playground';
-import {fetchCurrentPathAndFileTree, updateCurrentPathAndFileTree} from '../db';
+import {fetchCurrentPathAndFileTree, updateCurrentPathAndFileTree} from '../backend/db';
 import { useAuth } from '../contexts/AuthContext';
 
 

@@ -14,7 +14,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../backend/firebase';
 import CustomSnackBar from './CustomSnackBar';
 import { useNavigate } from 'react-router-dom';
 

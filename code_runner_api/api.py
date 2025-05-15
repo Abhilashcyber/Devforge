@@ -4,8 +4,17 @@ from typing import Literal
 import subprocess
 import tempfile
 import os
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all for dev; restrict this in production!
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class CodeExecutionRequest(BaseModel):
     input: str
