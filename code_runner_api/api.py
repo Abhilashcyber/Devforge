@@ -7,10 +7,6 @@ import os
 
 app = FastAPI()
 
-
-
-app = FastAPI()
-
 class CodeExecutionRequest(BaseModel):
     input: str
     code: str
