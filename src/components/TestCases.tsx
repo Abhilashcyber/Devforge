@@ -1,4 +1,4 @@
-import { Box, Button, Container, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import React from 'react';
 
 interface TestCase {
@@ -6,21 +6,30 @@ interface TestCase {
   output: string;
 }
 
-export default function TestCases() {
-  const testCases: TestCase[] = [
-    { input: 'input1', output: 'output1' },
-    { input: 'input2', output: 'output2' },
-    { input: 'input3', output: 'output3' },
-    { input: 'input4', output: 'output4' },
-  ];
+interface TestCasesProps {
+  testCases: TestCase[];
+}
 
-  const [testCase, setTestCase] = React.useState<TestCase>(testCases[0]);
+export default function TestCases({ testCases }: TestCasesProps) {
   const [testCaseIndex, setTestCaseIndex] = React.useState<number>(0);
 
+  React.useEffect(() => {
+    setTestCaseIndex(0); // reset when testCases change
+  }, [testCases]);
+
   const handleTestCaseChange = (index: number) => {
-    setTestCase(testCases[index]);
     setTestCaseIndex(index);
   };
+
+  if (testCases.length === 0) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography>No test cases available.</Typography>
+      </Box>
+    );
+  }
+
+  const testCase = testCases[testCaseIndex];
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -29,21 +38,19 @@ export default function TestCases() {
         display="flex"
         flexDirection="row"
         alignItems="center"
-        justifyContent="space-around"
-        sx={{ height: '8vh', bgcolor: '#424242', p: 2 }}
+        justifyContent="flex-start"
+        gap={2}
+        sx={{ height: '8vh', bgcolor: '#424242', p: 2, overflowX: 'auto' }}
       >
-        {testCases.map((t, i) => (
+        {testCases.map((_, i) => (
           <Button
             key={i}
             variant="contained"
             color="success"
-            sx={{ mb: 1 }}
             onClick={() => handleTestCaseChange(i)}
             disabled={i === testCaseIndex}
           >
-            <Typography variant="body1" color="white">
-              Test Case {i + 1}
-            </Typography>
+            Test Case {i + 1}
           </Button>
         ))}
       </Box>
@@ -71,14 +78,24 @@ export default function TestCases() {
             value={testCase.input}
             InputProps={{ readOnly: true }}
             fullWidth
-            sx={{ input: { color: 'white' }, label: { color: 'white' } }}
+            multiline
+            sx={{
+              input: { color: 'white' },
+              label: { color: 'white' },
+              '& .MuiInputBase-root': { color: 'white' },
+            }}
           />
           <TextField
-            label="Output"
+            label="Expected Output"
             value={testCase.output}
             InputProps={{ readOnly: true }}
             fullWidth
-            sx={{ input: { color: 'white' }, label: { color: 'white' } }}
+            multiline
+            sx={{
+              input: { color: 'white' },
+              label: { color: 'white' },
+              '& .MuiInputBase-root': { color: 'white' },
+            }}
           />
         </Paper>
       </Box>

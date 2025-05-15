@@ -78,7 +78,7 @@ export default function QuestionSetup({setShowQuestion, question}:QuestionSetupP
         />
 
         <Box sx={{ height: `${100 - editorHeight}%`, overflow: 'hidden' }}>
-          <TestCases />
+          <TestCases testCases={question?.test_cases || []} />
         </Box>
       </Box>
     </Box>

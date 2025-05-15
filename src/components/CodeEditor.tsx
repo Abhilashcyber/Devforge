@@ -40,7 +40,7 @@ export default function CodeEditor() {
 	  return () => resizeObserver.disconnect();
 	
   }, []);
-  console.log(language)
+
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} ref={containerRef}>
       <Box
@@ -104,7 +104,10 @@ export default function CodeEditor() {
         <Editor
           language={language}
           value={code}
-          onChange={(value) => setCode(value || '')}
+          onChange={(value) => {
+            const newCode = value || '';
+            setCode(newCode);
+          }}
           theme="vs-dark"
           options={{ minimap: { enabled: true }, fontSize: 16,automaticLayout: true }}
           width="100%"

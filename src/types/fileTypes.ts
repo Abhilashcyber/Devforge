@@ -37,5 +37,4 @@ export type Question = {
       input: string,
       output: string,}>
   code_verify: string,
-  user_code: string,
 }
