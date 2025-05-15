@@ -1,14 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import sys
-import io
-import contextlib
-
-app = FastAPI()
-
-
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 from typing import Literal
 import subprocess
 import tempfile
@@ -16,10 +7,14 @@ import os
 
 app = FastAPI()
 
+
+
+app = FastAPI()
+
 class CodeExecutionRequest(BaseModel):
     input: str
     code: str
-    language: Literal["python", "cpp", "javascript"]  # Restrict values
+    language: Literal["python", "cpp", "javascript"]
 
 
 @app.post("/execute/")
