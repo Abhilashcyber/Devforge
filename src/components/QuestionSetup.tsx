@@ -3,12 +3,15 @@ import React, { useState, useRef } from 'react';
 import Question from './Question';
 import CodeEditor from './CodeEditor';
 import TestCases from './TestCases';
+import { Question as QuestionType } from '../types/fileTypes';
 
 interface QuestionSetupProps{
   setShowQuestion: React.Dispatch<React.SetStateAction<boolean>>;
+  question: QuestionType | null
 }
 
-export default function QuestionSetup({setShowQuestion}:QuestionSetupProps) {
+export default function QuestionSetup({setShowQuestion, question}:QuestionSetupProps) {
+  console.log(question)
   const [editorHeight, setEditorHeight] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -41,18 +44,15 @@ export default function QuestionSetup({setShowQuestion}:QuestionSetupProps) {
     };
   }, []);
 
+  if(!question){
+    return <></>
+  }
+
   return (
     <Box display="flex" sx={{ width: '100%' }}>
       <Box sx={{ width: '50%' }}>
         <Question
-          question={{
-            question_id: '',
-            question_heading: '',
-            question_difficulty: '',
-            description: '',
-            exampleList: [],
-            constraints: [],
-          }}
+          question={question}
           setShowQuestion={setShowQuestion}
         />
       </Box>

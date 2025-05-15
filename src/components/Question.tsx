@@ -26,35 +26,7 @@ interface QuestionProps {
 
 
 export default function Question({question, setShowQuestion}: QuestionProps) {
-    const question_heading = "Two sum"
-    const question_id = "1"
-    const question_difficulty = "hard"
-    const description = "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order."
-    const exampleList = [
-        {
-            "input": [2, 7, 11, 15],
-            "output": [0, 1],
-            "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
-        },
-        {
-            "input": [3, 2, 4],
-            "output": [1, 2],
-            "explanation": "Because nums[1] + nums[2] == 6, we return [1, 2]."
-        },
-        {
-            "input": [3, 3],
-            "output": [0, 1],
-            "explanation": "Because nums[0] + nums[1] == 6, we return [0, 1]."
-        }
-    ]
-
-    const constraints = [
-        "2 <= nums.length <= 10^4",
-        "-10^9 <= nums[i] <= 10^9",
-        "-10^9 <= target <= 10^9",
-        "Only one valid answer exists."
-    ]
-
+    const {question_heading, question_id, question_difficulty , description, exampleList, constraints} = question;
     const handleGoBack = () =>{
         setShowQuestion(false);
     }
