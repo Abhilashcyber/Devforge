@@ -16,15 +16,15 @@ export interface FileManagerGUIProps {
 export default function FileManagerGUI(props: FileManagerGUIProps) {
   const { getNodeOfPath, currentPath, setCurrentpath, setClickedFile, removeNodeFromTree } = props
   const nodeToDisplay = getNodeOfPath();
-
   // useEffect(() => {
   //   if (nodeToDisplay) {
   //     setCurrentpath(nodeToDisplay.name);
   //   }
   // }, [nodeToDisplay, setCurrentpath]);
 
-  const renderNodes = (node: Folder) => {
-    return node.children.map(
+  const renderNodes = (nodes: Folder) => {
+    if(nodes.children){
+      return nodes.children.map(
       (node: FileNode) => {
         return <Grid size={2} key={node.id}>
           <Box
@@ -80,6 +80,7 @@ export default function FileManagerGUI(props: FileManagerGUIProps) {
       </Grid>;
       }
     );
+    }
   }
 
   return (

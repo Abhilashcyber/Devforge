@@ -38,7 +38,8 @@ export default function FileManager() {
         setFileTree(fileTree);
       }
     };
-
+    console.log(currpath);
+    console.log(fileTree);
     useEffect(() => {
       if (!currentUser) return;
   
@@ -184,7 +185,6 @@ export default function FileManager() {
         }
 			}
       res ? openSnackBar("created"):openSnackBar("exists");
-      console.log(fileTree);
 			handleDialogClose();
 		}
 
@@ -202,7 +202,6 @@ export default function FileManager() {
     let currPathSplit = currpath.split("/");
     currPathSplit.pop();
     const newPath = currPathSplit.join("/");
-    console.log(newPath);
     setCurrpath(newPath);
   }
 
@@ -250,7 +249,6 @@ export default function FileManager() {
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries((formData as any).entries());
               const email = formJson.email;
-              console.log(email);
               handleDialogClose();
             },
           },

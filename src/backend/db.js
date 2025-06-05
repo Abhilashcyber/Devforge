@@ -20,12 +20,19 @@ export const createUserInDb = async (user, email, fullName) => {
   };
   
 export const createPlaygroundInDb = async (userId) => {
-try {
+  try {
     const docRef = doc(db, 'playground', userId);
     const docData = {
-    userId: userId,
-    currentPath: '',
-    fileTree: [],
+      userId: userId,
+      currentPath: '~',
+      fileTree: {
+        id: 'root',
+        name: '~',
+        type: 'folder',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        children: [],
+      },
     };
 
     await setDoc(docRef, docData);
@@ -33,8 +40,7 @@ try {
     } catch (error) {
         console.error('Error creating playground document:', error.message);
     }
-}
-
+  };
 
 export const fetchCurrentPathAndFileTree = async (userId) => {
   try {
@@ -56,7 +62,7 @@ export const fetchCurrentPathAndFileTree = async (userId) => {
     console.error('Error fetching current path:', error.message);
     return null;
   }
-};
+  };
 
 export const updateCurrentPathAndFileTree = async (userId, newPath, fileTree) => {
     try {
@@ -102,26 +108,25 @@ export const fetchQuestions = async () => {
     }
   };
   
-
 export const addQuestion = async (question) => {
-  try {
-    const docRef = doc(db, 'questions', question.question_id);
+    try {
+      const docRef = doc(db, 'questions', question.question_id);
 
-    await setDoc(docRef, {
-      question_id: question.question_id,
-      question_heading: question.question_heading,
-      question_difficulty: question.question_difficulty,
-      description: question.description,
-      exampleList: question.exampleList,
-      constraints: question.constraints,
-      starter_code: question.starter_code,
-      test_cases: question.test_cases,
-      code_verify: question.code_verify,
-      user_code: question.user_code,
-    });
+      await setDoc(docRef, {
+        question_id: question.question_id,
+        question_heading: question.question_heading,
+        question_difficulty: question.question_difficulty,
+        description: question.description,
+        exampleList: question.exampleList,
+        constraints: question.constraints,
+        starter_code: question.starter_code,
+        test_cases: question.test_cases,
+        code_verify: question.code_verify,
+        user_code: question.user_code,
+      });
 
-    console.log('Question added/updated successfully!');
-  } catch (error) {
-    console.error('Error adding question:', error.message);
-  }
-}
+      console.log('Question added/updated successfully!');
+    } catch (error) {
+      console.error('Error adding question:', error.message);
+    }
+  };
